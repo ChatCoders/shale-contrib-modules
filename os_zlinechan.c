@@ -91,7 +91,7 @@ static void zlinechan_check_join(hook_channel_joinpart_t *hdata)
 					cu->user->user, cu->user->ip,
 					cu->chan->name);
 
-			z = zline_add(cu->user->ip, reason, 604800, svs->me->nick);
+			z = zline_add(cu->user->ip, reason, 1800, svs->me->nick);
 		}
 	}
 }
