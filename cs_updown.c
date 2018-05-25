@@ -39,6 +39,7 @@ static void cs_cmd_up(sourceinfo_t *si, int parc, char *parv[])
 	chanuser_t *cu;
 	mychan_t *mc;
 	char *name = parv[0];
+        char *chan = parv[0];
 	int fl;
 
 	if (!name)
@@ -60,6 +61,12 @@ static void cs_cmd_up(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+        if (metadata_find(mc, "private:frozen:freezer"))
+		{
+			command_fail(si, fault_noprivs, _("\2%s\2 is frozen."), chan);
+			return;
+	}
+
 	if (!mc->chan)
 	{
 		command_fail(si, fault_nosuch_target, "\2%s\2 does not exist.", name);
@@ -68,6 +75,12 @@ static void cs_cmd_up(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!si->su)
 		return; // needs to be done over IRC
+
+        if (chanacs_source_has_flag(mc, si, CA_SUSPENDED))
+        {
+                command_fail(si, fault_noprivs, _("Your access in %s is \2suspended\2."), chan);
+                return;
+        }
 
 	cu = chanuser_find(mc->chan, si->su);
 
@@ -143,6 +156,7 @@ static void cs_cmd_down(sourceinfo_t *si, int parc, char *parv[])
 	chanuser_t *cu;
 	mychan_t *mc;
 	char *name = parv[0];
+        char *chan = parv[0];
 
 	if (!name)
 	{
@@ -163,6 +177,12 @@ static void cs_cmd_down(sourceinfo_t *si, int parc, char *parv[])
 		return;
 	}
 
+        if (metadata_find(mc, "private:frozen:freezer"))
+		{
+			command_fail(si, fault_noprivs, _("\2%s\2 is frozen."), chan);
+			return;
+	}
+
 	if (!mc->chan)
 	{
 		command_fail(si, fault_nosuch_target, "\2%s\2 does not exist.", name);
@@ -171,6 +191,12 @@ static void cs_cmd_down(sourceinfo_t *si, int parc, char *parv[])
 
 	if (!si->su)
 		return; // needs to be done over IRC
+
+        if (chanacs_source_has_flag(mc, si, CA_SUSPENDED))
+        {
+                command_fail(si, fault_noprivs, _("Your access in %s is \2suspended\2."), chan);
+                return;
+        }
 
 	cu = chanuser_find(mc->chan, si->su);
 
