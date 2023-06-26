@@ -173,7 +173,7 @@ static void ajoin_on_identify(user_t *u)
     mowgli_strlcpy(buf, md->value, sizeof buf);
     chan = strtok(buf, " ,");
     while (chan != NULL) {
-        if(ircd->type == PROTOCOL_SIRCD) {
+        if(ircd->type == PROTOCOL_CHAMBERIRCD) {
             sts(":%s ENCAP * SVSJOIN %s %s", ME, CLIENT_NAME(u), chan);
         } else {
             sts(":%s SVSJOIN %s %s", CLIENT_NAME(nicksvs.me->me), CLIENT_NAME(u), chan);
